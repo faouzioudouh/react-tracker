@@ -1,0 +1,25 @@
+{
+  "name": "react-tracker",
+  "version": "1.0.0",
+  "description": "Track actions whthin your component with a tracker redux-like!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faouzioudouh/react-tracker.git"
+  },
+  "keywords": [
+    "React",
+    "tracking",
+    "track",
+    "analytic"
+  ],
+  "author": "Faouzi Oudouh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/faouzioudouh/react-tracker/issues"
+  },
+  "homepage": "https://github.com/faouzioudouh/react-tracker#readme"
+}
