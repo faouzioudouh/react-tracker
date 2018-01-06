@@ -6,7 +6,7 @@ const provideTrackEvent = (Component, mapTrackerEventToProps) => {
     const displayName = getDisplayName(Component);
 
     const trackEventProvider = (props, context) => {
-        const trackEvent = context.tracker.dispatch;
+        const trackEvent = context.trackEvent;
 
         if (!trackEvent) {
             throw Error(`Could not find tracker in the context of ` + `"${displayName}"`);
@@ -19,7 +19,7 @@ const provideTrackEvent = (Component, mapTrackerEventToProps) => {
 
     trackEventProvider.displayName = displayName;
     trackEventProvider.contextTypes = {
-        tracker: Types.tracker.isRequired
+        trackEvent: Types.func.isRequired
     };
 
     return trackEventProvider;

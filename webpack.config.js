@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const { ReactLoadablePlugin } = require('webpack');
+const webpack = require('webpack');
 
 module.exports = {
 entry: {
@@ -18,25 +18,44 @@ output: {
 },
 module: {
     rules: [
-    {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-        loader: 'babel-loader',
-        options: {
-            babelrc: false,
-            presets: [
-            ['es2015', { modules: false }],
-            'react',
-            ],
-            plugins: [
-            'transform-class-properties',
-            'transform-object-assign',
-            ],
-        }
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: {
+            loader: 'babel-loader',
+            options: {
+                babelrc: false,
+                presets: [
+                ['es2015', { modules: false }],
+                'react',
+                ],
+                plugins: [
+                'transform-class-properties',
+                'transform-object-assign',
+                ],
+            }
+            },
         },
-    },
-    ],
+    ]
 },
-devtool: 'inline-source-map'
+plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: true,
+      compress: {
+        warnings: false,
+        pure_getters: true,
+        unsafe: true,
+        unsafe_comps: true,
+        screw_ie8: true
+      },
+      output: {
+        comments: false,
+      }
+    }),
+]
 };

@@ -2,7 +2,7 @@
   "name": "react-tracker",
   "version": "1.0.0",
   "description": "Track actions within your React app with a tracker redux-like!",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "build": "webpack"
   },
@@ -34,7 +34,6 @@
     "webpack": "^3.6.0"
   },
   "dependencies": {
-    "hoist-non-react-statics": "^2.2.1",
     "prop-types": "^15.5.10"
   },
   "peerDependencies": {
