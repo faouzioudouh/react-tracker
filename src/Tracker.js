@@ -1,9 +1,9 @@
-import { assertSubscribers } from './utils';
+import { assertlisteners } from './utils';
 
 export default class Tracker {
-    constructor(subscribers) {
+    constructor(listeners) {
         this.trackingHistory = [];
-        this.subscribers = assertSubscribers(subscribers);
+        this.listeners = assertlisteners(listeners);
 
         this.dispatch = this.dispatch.bind(this);
     }
@@ -12,7 +12,7 @@ export default class Tracker {
         if (typeof callback === 'function' && eventType && typeof eventType === 'string') {
             callback.eventType = eventType;
 
-            this.subscribers = [...this.subscribers, callback];
+            this.listeners = [...this.listeners, callback];
         }
     }
 
@@ -23,9 +23,14 @@ export default class Tracker {
             return null;
         }
 
-        for (let i = 0; i < this.subscribers.length; i++) {
-            if (typeof this.subscribers[i] === 'function' && this.subscribers[i].eventType === type) {
-                const save = this.subscribers[i].call(null, event, this.trackingHistory);
+        for (let i = 0; i < this.listeners.length; i++) {
+            const listener = this.listeners[i];
+
+            if (
+                typeof listener === 'function' &&
+                (listener.eventType === type || listener.eventType === '*')
+            ) {
+                const save = listener.call(null, event, this.trackingHistory);
 
                 if (save) {
                     this.trackingHistory = [...this.trackingHistory, save];

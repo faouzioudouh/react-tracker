@@ -1,5 +1,5 @@
 import TrackerProvider from './components/TrackerProvider';
-import provideTrackEvent from './HOCs/provideTrackEvent';
+import withTracking from './HOCs/withTracking';
 import Tracker from './Tracker';
 
-export { Tracker, TrackerProvider, provideTrackEvent };
+export { Tracker, TrackerProvider, withTracking };

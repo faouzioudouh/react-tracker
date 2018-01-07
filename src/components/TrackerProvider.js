@@ -6,16 +6,16 @@ export default class TrackerProvider extends Component {
         return {
             trackEvent: this.tracker.dispatch
             // We might need to extract other properties later.
-        }
+        };
     }
 
     constructor(props, context) {
-        super(props, context)
+        super(props, context);
         this.tracker = props.tracker;
     }
 
     render() {
-        return Children.only(this.props.children)
+        return Children.only(this.props.children);
     }
 }
 
