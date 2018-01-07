@@ -148,7 +148,7 @@ ProductList.propTypes = {
       currency: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
-  onProductClick: PropTypes.func.isRequired
+  trackProductClick: PropTypes.func.isRequired
 }
 
 export default ProductList
@@ -161,7 +161,7 @@ To use `withTracking()`, you need to define a special function (react-redux-like
 For example, we need to track product click with Product ID and price, so we need to fire the event on the procut click!
 !!!! as we know the `trackEvent` only accpect the object that describes the Event (type and data if any) !!!!
 
-## .../tracking/listeners/cart.js
+#### `.../tracking/listeners/cart.js`
 
 ```js
 function trackProductClick(event = {}, eventsHistory) {
@@ -177,7 +177,7 @@ function trackProductClick(event = {}, eventsHistory) {
 trackProductClick.eventType = 'PRODUCT_CLICK';
 ```
 
-## .../tracking/events/cart.js
+#### `.../tracking/events/cart.js`
 
 ```js
 function getProductClickEvent(id, price) {
@@ -224,9 +224,8 @@ You only need to use it once when you render the root component:
 import React from 'react'
 import { render } from 'react-dom'
 import { TrackerProvider, Tracker } from 'react-tracker'
-import { createStore } from 'redux'
 import { trackProductClick } from './tracking/listeners/cart'
-import App from './components/App'
+import ProductsList from './components/ProductsList'
 
 let store = new Tracker([trackProductClick /*, other event listeners goes here*/])
 
