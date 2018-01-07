@@ -1,99 +1,248 @@
+# ![React tracker Logo](http://pichoster.net/images/2018/01/07/32e65824cf5bdee238722112b9e95a10.png)
+
 # react-tracker [![npm version](https://badge.fury.io/js/react-tracker.svg)](https://badge.fury.io/js/react-tracker)
 
 - React specific tracking library, usable as a higher-order component
 - Flexible-scalable solution for tracking in React Apps
 - Easy to use (Redux-like)
-- Can be pluged with any Analytics platform agnostic lib (You can mainly do anything in the subscribers)
+- Can be pluged with any Analytics platform agnostic lib (You can mainly do anything in the event listeners callback)
 
 ## Installation
 
 ```
 npm install --save react-tracker
 ```
+This assumes you are using [npm](https://www.npmjs.com/) as your package manager.  
 
-## Usage
-`provideTracking()` expects one arguments, function `mapTrackingToProps`.
-- `mapTrackingToProps` should return object to be merged with Component props.
+## The Gist
 
-### Provide tracking function to your component
+The idea is to only provide one Tracker!
+Why? because at some you'll need to apply some restriction on some events E.g. :
+ - Track product click only once!
+ - Track product click only if page views is already tracked
+in these case we need to have the tracking history.. that's why we keep the history synced by providing the **same instance of tracker to all components**
 
 ```js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { TrackerProvider, withTracking, Tracker } from 'react-tracker';
+import { Tracker } from 'react-tracker';
 
-class HomePage extends React.Component {
+/**
+ * This is an event listner, a pure function with (event, eventsHistory) => tracking goes here.
+ * It describes what to do with the just-fired event.
+ *
+ * There is two types of event listeners
+ * 1- Listener with eventType specified it will be called when the given eventType is fired/dispatched
+ * 2- Listener with no eventType it will be called whenevent an event fired/dispatched
+ * Think of the last type of listeners as `jQuery.on('*', callback)`
+ * You can use `switch` statement to handle multiple events in one listener
+ */
 
-  handleClick = () => {
-    // ... you click logic
+// Listener-per-event example
+function trackAddToCartClick(event = {}, eventsHistory) {
+  if (event.type) {
+      // Call GTM or you tracking provider...
 
-    this.props.TrackThisAction({
-        type: 'CLICK_EVENT', // required
-        data: // optional
-    });
-  }
-
-  render() {
-    return (
-      <button onClick={this.handleClick}>
-        Click Me!
-      </button>
-    );
+    // If you want save this event, just return it, otherwise it will be ignored.
+    return event
   }
 }
 
-const mapTrackingToProps = trackEvent => ({
-    TrackThisAction = trackEvent
-});
+// Allow `trackAddToCartClick` to listen only on `ADD_TO_CART_BUTTON_CLICK` event!
+trackAddToCartClick.eventType = 'ADD_TO_CART_BUTTON_CLICK';
 
-const HomePageWithTracking = withTracking(mapTrackingToProps)(HomePage);
+// Listen-on-all example
+function trackCartEvents(event = {}, eventsHistory) {
+  switch(event.type) {
+    case 'ADD_TO_CART_BUTTON_CLICK':
+      // CALL your tracking provider..
 
-const tracker = new Tracker([
-    {
-        clickEvent: (event, eventsHistory) => {
-            // Do whatevenr you want to do
-        }
-    }
-]);
+        // If you want save this event, just return it, otherwise it will be ignored.
+        return event
+  
+    case 'REMOVE_FROM_CART_CLICK':
+        // Your tracking logic goes here..
 
-const HomePageWithTracker = () => (
-    <TrackerProvider tracker={tracker}>
-        <HomePageWithTracking />
-    <TrackerProvider />    
+        break;
+
+    default:
+        // silence
+}
+
+// Create a Tracker holding the tracked events History of your app.
+// Its API is { on, trackEvent, getHistory }.
+let tracker = new Tracker([trackAddToCartClick, trackCartEvents])
+
+// In additional to to intialize the tracker with event listeners.
+// You can add a an event listener using `on()`
+
+// Listen on `PRODUCT_CLICK`events.
+tracker.on('PRODUCT_CLICK', (event, eventsHistory) =>
+  console.log(event)
 );
 
-ReactDOM.render(<HomePageWithTracker />, document.getElementById('root'));
+// Listen on all events
+tracker.on('*', (event, eventsHistory) =>
+  console.log(event)
+);
 
+
+// And then you can fire an events using `trackEvent` function :
+
+// Fire `ADD_TO_CART_EVENT`
+tracker.trackEvent({ type: 'ADD_TO_CART_EVENT' })
+
+// Fire `ADD_TO_CART_EVENT`
+tracker.trackEvent({ type: 'ADD_TO_CART_EVENT' })
+
+// Fire `PRODUCT_CLICK`
+tracker.trackEvent({ type: 'PRODUCT_CLICK' })
 ```
 
-### Usage on Stateless Functional Components
+## Usage with React
 
-You can also track events by importing `withTracking()` and wrapping your stateless functional component, which will provide the object returned from `mapTrackingToProps` as props:
+#### `components/Product.js`
 
 ```js
-import { withTracking } from 'react-tracking';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-const FooPage = (props) => {
-  return (
-    <div onClick={() => {
-        props.trackClickEvent({
-            type: 'clickEvent',
-            data: // Optional
-        });
+const Product = ({ onClick, title, price, currency }) => (
+  <li
+    onClick={onClick}
+  >
+    {title}
+    <span> {price} {currency} </span>
+  </li>
+)
 
-        // ... the rest of your component
-      }}
-    />
-  )
+Product.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  title: PropTypes.bool.isRequired,
+  price: PropTypes.string.isRequired
+  currency: PropTypes.string.isRequired
 }
 
-const mapTrackingToProps = trackEvent => ({
-    trackClickEvent: trackEvent
-});
-
-export default withTracking(mapTrackingToProps)(FooComponent);
+export default Product
 ```
 
-### Advanced Usage
- // TODO
+#### `components/ProductList.js`
 
+```js
+import React from 'react'
+import PropTypes from 'prop-types'
+import Product from './Product'
+
+const ProductList = ({ products, trackProductClick }) => (
+  <ul>
+    {products.map(product => (
+      <Product key={product.id} {...product} onClick={() => trackProductClick(product.id, product.price)} />
+    ))}
+  </ul>
+)
+
+ProductList.propTypes = {
+  products: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      price: PropTypes.string.isRequired,
+      currency: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+  onProductClick: PropTypes.func.isRequired
+}
+
+export default ProductList
+```
+
+### Implementing Container Components
+
+Now it's tracking time..
+To use `withTracking()`, you need to define a special function (react-redux-like) called `mapTrackingToProps` that tells how to pass the trackEvent function to the props.
+For example, we need to track product click with Product ID and price, so we need to fire the event on the procut click!
+!!!! as we know the `trackEvent` only accpect the object that describes the Event (type and data if any) !!!!
+
+## .../tracking/listeners/cart.js
+
+```js
+function trackProductClick(event = {}, eventsHistory) {
+  if (event.type) {
+      // Call GTM or you tracking provider...
+
+    // If you want save this event, just return it, otherwise it will be ignored.
+    return event
+  }
+}
+
+// scope `trackProductClick` to listen only on `PRODUCT_CLICK` event!
+trackProductClick.eventType = 'PRODUCT_CLICK';
+```
+
+## .../tracking/events/cart.js
+
+```js
+function getProductClickEvent(id, price) {
+  return {
+      type: 'PRODUCT_CLICK',
+      data: {
+          id: id,
+          price: price
+      }
+  }
+};
+```
+
+```js
+const mapTrackingToProps = trackEvent => {
+  return {
+    trackProductClick: (id, price) => {
+      trackEvent(getProductClickEvent(id, price))
+    }
+  }
+}
+```
+Finally, we create the `ProductsList` by calling `withTracking()` and passing our `mapTrackingToProps`:
+
+```js
+import { withTracking } from 'react-tracker'
+
+const ProductsListWithTracking = withTracking(mapDispatchToProps)(ProductsList)
+
+export default ProductsListWithTracking
+```
+
+
+## Let React meet our Tracker
+
+All container components need access to the tracker so they can fire events.
+
+We will use the `<Provider>` to [magically](https://facebook.github.io/react/docs/context.html) make the tracker available to all container components in the application without passing it explicitly.
+You only need to use it once when you render the root component:
+
+#### `index.js`
+
+```js
+import React from 'react'
+import { render } from 'react-dom'
+import { TrackerProvider, Tracker } from 'react-tracker'
+import { createStore } from 'redux'
+import { trackProductClick } from './tracking/listeners/cart'
+import App from './components/App'
+
+let store = new Tracker([trackProductClick /*, other event listeners goes here*/])
+
+render(
+  <TrackerProvider tracker={store}>
+    <ProductsList products={someProducts} />
+  </TrackerProvider>,
+  document.getElementById('root')
+)
+```
+
+## Contribution
+
+This project is in its early stages, I'd be very happy if you can help :)
+
+
+## License
+
+MIT
