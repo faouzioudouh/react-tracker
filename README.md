@@ -17,7 +17,7 @@ This assumes you are using [npm](https://www.npmjs.com/) as your package manager
 ## The Gist
 
 The idea is to only provide one Tracker!
-Why? because at some you'll need to apply some restriction on some events E.g. :
+Why? because at some point you'll need to apply some restriction on some events E.g. :
  - Track product click only once!
  - Track product click only if page views is already tracked
 in these case we need to have the tracking history.. that's why we keep the history synced by providing the **same instance of tracker to all components**
@@ -227,10 +227,10 @@ import { TrackerProvider, Tracker } from 'react-tracker'
 import { trackProductClick } from './tracking/listeners/cart'
 import ProductsList from './components/ProductsList'
 
-let store = new Tracker([trackProductClick /*, other event listeners goes here*/])
+let tracker = new Tracker([trackProductClick /*, other event listeners goes here*/])
 
 render(
-  <TrackerProvider tracker={store}>
+  <TrackerProvider tracker={tracker}>
     <ProductsList products={someProducts} />
   </TrackerProvider>,
   document.getElementById('root')
