@@ -38,8 +38,25 @@ import { Tracker } from 'react-tracker';
 
 // Listener-per-event example
 function trackAddToCartClick(event = {}, eventsHistory) {
-  if (event.type) {
-      // Call GTM or you tracking provider...
+    // Call DataLayer or you tracking provider...
+    // Source: https://developers.google.com/tag-manager/enhanced-ecommerce
+      dataLayer.push({
+        'event': 'addToCart',
+        'ecommerce': {
+          'addToCart': {
+            'product': [{
+              'id': event.data.id,
+              'name': event.data.name,
+              'price': event.data.price,
+              'currency': event.data.currency
+            }]
+          }
+        }
+      });
+    }
+
+    // Or call FB pixle
+    fbq('track', 'Purchase', {'price': event.data.price ,'currency': event.data.currency});
 
     // If you want save this event, just return it, otherwise it will be ignored.
     return event
@@ -53,18 +70,18 @@ trackAddToCartClick.eventType = 'ADD_TO_CART_BUTTON_CLICK';
 function trackCartEvents(event = {}, eventsHistory) {
   switch(event.type) {
     case 'ADD_TO_CART_BUTTON_CLICK':
-      // CALL your tracking provider..
+      // CALL your tracking providers..
 
-        // If you want save this event, just return it, otherwise it will be ignored.
-        return event
+      // If you want save this event, just return it, otherwise it will be ignored.
+      return event
   
     case 'REMOVE_FROM_CART_CLICK':
-        // Your tracking logic goes here..
+      // CALL your tracking providers..
 
-        break;
+      break;
 
     default:
-        // silence
+      // silence
 }
 
 // Create a Tracker holding the tracked events History of your app.
