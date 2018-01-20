@@ -1,5 +1,5 @@
 import { Component, Children } from 'react';
-import Types from '../types';
+import propTypes from 'prop-types';
 
 export default class TrackerProvider extends Component {
     getChildContext() {
@@ -20,9 +20,9 @@ export default class TrackerProvider extends Component {
 }
 
 TrackerProvider.propTypes = {
-    children: Types.element.isRequired,
+    children: propTypes.element.isRequired,
 };
 
 TrackerProvider.childContextTypes = {
-    trackEvent: Types.func.isRequired,
+    trackEvent: propTypes.func.isRequired,
 };
