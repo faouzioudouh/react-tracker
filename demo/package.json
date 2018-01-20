@@ -1,10 +1,31 @@
 {
+  "name": "heaven-interview",
+  "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
-    "classnames": "^2.1.5",
-    "director": "^1.2.0",
-    "react": "^0.13.3",
-    "todomvc-app-css": "^2.0.0",
-    "todomvc-common": "^1.0.1"
+    "classnames": "^2.2.5",
+    "lodash": "^4.17.4",
+    "query-string": "^5.0.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-redux": "^5.0.4",
+    "react-tracker": "0.0.4",
+    "redux": "^3.6.0"
+  },
+  "devDependencies": {
+    "enzyme": "2.9.0",
+    "react-scripts": "0.9.5",
+    "react-test-renderer": "^16.0.0",
+    "sinon": "^4.0.0",
+    "sinon-chai": "^2.13.0",
+    "chai": "4.1.2",
+    "chai-enzyme": "0.8.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject --no-cache"
   }
 }
