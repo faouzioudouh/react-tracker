@@ -222,7 +222,7 @@ Finally, we create the `ProductsList` by calling `withTracking()` and passing ou
 ```js
 import { withTracking } from 'react-tracker'
 
-const ProductsListWithTracking = withTracking(mapDispatchToProps)(ProductsList)
+const ProductsListWithTracking = withTracking(mapTrackingToProps)(ProductsList)
 
 export default ProductsListWithTracking
 ```
