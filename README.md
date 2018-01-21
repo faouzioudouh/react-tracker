@@ -2,17 +2,40 @@
 
 # react-tracker [![npm version](https://badge.fury.io/js/react-tracker.svg)](https://badge.fury.io/js/react-tracker)
 
+## What?
 - React specific tracking library, usable as a higher-order component
 - Flexible-scalable solution for tracking in React Apps
 - Easy to use (Redux-like)
 - Can be pluged with any Analytics platform agnostic lib (You can mainly do anything in the event listeners callback)
 
+## Why not redux middleware?
+- Tracking is not a __state__
+- Not the all the tracking events are redux actions!
+- Redux should only take care of your UI state!
+
 ## Installation
 
 ```
-npm install --save react-tracker
+$ npm install --save react-tracker
 ```
 This assumes you are using [npm](https://www.npmjs.com/) as your package manager.  
+
+## Demo
+
+To see the react-tracker in action please visit the link below.
+[Link](https://faouzioudouh.github.io/react-tracker/)
+
+## Running demo in this repository
+
+```
+$ git clone https://github.com/faouzioudouh/react-tracker.git
+
+$ cd demo
+
+$ npm install
+
+$ npm run start
+```
 
 ## The Gist
 
@@ -65,24 +88,6 @@ function trackAddToCartClick(event = {}, eventsHistory) {
 
 // Allow `trackAddToCartClick` to listen only on `ADD_TO_CART_BUTTON_CLICK` event!
 trackAddToCartClick.eventType = 'ADD_TO_CART_BUTTON_CLICK';
-
-// Listen-on-all example
-function trackCartEvents(event = {}, eventsHistory) {
-  switch(event.type) {
-    case 'ADD_TO_CART_BUTTON_CLICK':
-      // CALL your tracking providers..
-
-      // If you want save this event, just return it, otherwise it will be ignored.
-      return event
-  
-    case 'REMOVE_FROM_CART_CLICK':
-      // CALL your tracking providers..
-
-      break;
-
-    default:
-      // silence
-}
 
 // Create a Tracker holding the tracked events History of your app.
 // Its API is { on, trackEvent, getHistory }.
@@ -176,7 +181,6 @@ export default ProductList
 Now it's tracking time..
 To use `withTracking()`, you need to define a special function (react-redux-like) called `mapTrackingToProps` that tells how to pass the trackEvent function to the props.
 For example, we need to track product click with Product ID and price, so we need to fire the event on the procut click!
-!!!! as we know the `trackEvent` only accpect the object that describes the Event (type and data if any) !!!!
 
 #### `.../tracking/listeners/cart.js`
 
