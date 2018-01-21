@@ -6,6 +6,10 @@ import styles from './AddFriendForm.css';
 
 import SelectBlock from './SelectBlock';
 
+// tracking
+import { withTracking } from 'react-tracker';
+import { addFriendEvent } from '../tracking/events/friendEvents';
+
 const selectOptions = [
   {
     text: '-- Select --',
@@ -105,15 +109,20 @@ class AddFriendForm extends Component {
    */
   handleSubmit (e) {
     e.preventDefault();
-    if (this.state.name && this.state.gender) {     
-      this.props.addFriend(this.state.name, this.state.gender);
+    const { name, gender } = this.state;
+
+    if (name && gender) {
+      this.props.addFriend(name, gender);
       this.setState({ name: '', gender: '' });
 
       // Rest form fields
       this.formRef.reset();
 
       //Focus on the name input
-      this.formRef.elements.name.focus();      
+      this.formRef.elements.name.focus();
+
+      // Track add friend action!
+      this.props.trackAddFriendEvent(name, gender);
     }
   }
 
@@ -123,4 +132,10 @@ AddFriendForm.propTypes = {
   addFriend: PropTypes.func.isRequired
 };
 
-export default AddFriendForm
+const mapTrackingToProps = trackEvent => ({
+  trackAddFriendEvent: (name, gender) => trackEvent(addFriendEvent(name, gender))
+});
+
+const AddFriendFormWithTracking = withTracking(mapTrackingToProps)(AddFriendForm)
+
+export default AddFriendFormWithTracking;

@@ -4,7 +4,15 @@ import PropTypes from 'prop-types';
 import styles from './FriendList.css';
 import FriendListItem from './FriendListItem';
 
+// tracking
+import { withTracking } from 'react-tracker';
+import { friendsPageView } from '../tracking/events/friendEvents';
+
 class FriendList extends Component {
+
+  componentDidMount() {
+    this.props.trackFriendPageView(this.props.friends.length);
+  }
 
   render () {
     return (
@@ -35,4 +43,10 @@ FriendList.propTypes = {
   actions: PropTypes.object.isRequired
 };
 
-export default FriendList;
+const mapTrackingToProps = trackEvent => ({
+  trackFriendPageView: friendsCount => trackEvent(friendsPageView(friendsCount))
+});
+
+const FriendListWithTracking = withTracking(mapTrackingToProps)(FriendList)
+
+export default FriendListWithTracking;

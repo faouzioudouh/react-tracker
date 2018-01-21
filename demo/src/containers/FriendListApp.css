@@ -5,9 +5,18 @@ body {
   justify-content: center;
 }
 
-:local(.friendListApp) {
+.wrapper {
+  display: flex;
+}
+
+.wrapper section {
   width: 300px;
+  margin-left: 20px;
+}
+
+:local(.friendListApp) {
   padding-top: 18px;
+  margin-top: 56px;
   background-color: #5C75B0;
   border: 1px solid #E3E3E3;
 }
