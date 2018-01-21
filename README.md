@@ -23,6 +23,7 @@ This assumes you are using [npm](https://www.npmjs.com/) as your package manager
 ## Demo
 
 To see the react-tracker in action please visit the link below.
+
 [Link](https://faouzioudouh.github.io/react-tracker/)
 
 ## Running demo in this repository
