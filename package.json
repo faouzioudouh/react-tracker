@@ -1,6 +1,6 @@
 {
   "name": "react-tracker",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Track actions within your React app with a tracker redux-like!",
   "main": "build/index.js",
   "scripts": {
