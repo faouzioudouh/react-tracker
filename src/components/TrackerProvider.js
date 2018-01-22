@@ -4,7 +4,7 @@ import propTypes from 'prop-types';
 export default class TrackerProvider extends Component {
     getChildContext() {
         return {
-            trackEvent: this.tracker.dispatch
+            trackEvent: this.tracker.trackEvent
             // We might need to extract other properties later.
         };
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TrackerProvider, Tracker } from 'react-tracker'
+import { TrackerProvider, Tracker, trackingMiddleware } from 'react-tracker'
 import Highlight from 'react-highlight';
 
 import FriendListApp from './FriendListApp';
@@ -11,7 +11,8 @@ import trackingListeners from '../tracking/listeners';
 const tracker = new Tracker(trackingListeners);
 
 // Configure the store.
-const store = configureStore();
+const store = configureStore({}, trackingMiddleware(tracker));
+
 const provideStore = storeProvider(store);
 const FriendListAppWithStore = provideStore(FriendListApp);
 

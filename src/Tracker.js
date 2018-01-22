@@ -5,7 +5,7 @@ export default class Tracker {
         this.trackingHistory = [];
         this.listeners = assertlisteners(listeners);
 
-        this.dispatch = this.dispatch.bind(this);
+        this.trackEvent = this.track.bind(this);
     }
 
     on(eventType, callback) {
@@ -16,7 +16,7 @@ export default class Tracker {
         }
     }
 
-    dispatch(event) {
+    trackEvent(event) {
         const { type, data } = event || {};
 
         if (!type) {
