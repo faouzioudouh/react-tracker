@@ -4,7 +4,8 @@
   "description": "Track actions within your React app with a tracker redux-like!",
   "main": "build/index.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "jest": "^22.1.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "webpack": "^3.6.0"
