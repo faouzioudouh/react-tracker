@@ -4,14 +4,17 @@
 
 ## What?
 - React specific tracking library, usable as a higher-order component
-- Flexible-scalable solution for tracking in React Apps
+- Flexible-scalable solution for tracking
 - Easy to use (Redux-like)
 - Can be pluged with any Analytics platform agnostic lib (You can mainly do anything in the event listeners callback)
 
-## Why not redux middleware?
-- Tracking is not a __state__
-- Not the all the tracking events are redux actions!
-- Redux should only take care of your UI state!
+## Why providing Redux Middleware?
+- Sometimes its better to track events based on the correspondent redux action!
+- [Demo](https://www.npmjs.com/)
+
+## Why not Middleware only?
+- Not all the tracking events are necessarily redux actions!
+- [Demo](https://www.npmjs.com/)
 
 ## Installation
 
@@ -55,7 +58,7 @@ import { Tracker } from 'react-tracker';
  *
  * There is two types of event listeners
  * 1- Listener with eventType specified it will be called when the given eventType is fired/dispatched
- * 2- Listener with no eventType it will be called whenevent an event fired/dispatched
+ * 2- Listener with (*) eventType it will be called whenevent an event fired/dispatched
  * Think of the last type of listeners as `jQuery.on('*', callback)`
  * You can use `switch` statement to handle multiple events in one listener
  */
@@ -63,28 +66,13 @@ import { Tracker } from 'react-tracker';
 // Listener-per-event example
 function trackAddToCartClick(event = {}, eventsHistory) {
     // Call DataLayer or you tracking provider...
-    // Source: https://developers.google.com/tag-manager/enhanced-ecommerce
-      dataLayer.push({
-        'event': 'addToCart',
-        'ecommerce': {
-          'addToCart': {
-            'product': [{
-              'id': event.data.id,
-              'name': event.data.name,
-              'price': event.data.price,
-              'currency': event.data.currency
-            }]
-          }
-        }
-      });
-    }
+    dataLayer.push(...event.data);
 
     // Or call FB pixle
     fbq('track', 'Purchase', {'price': event.data.price ,'currency': event.data.currency});
 
     // If you want save this event, just return it, otherwise it will be ignored.
     return event
-  }
 }
 
 // Allow `trackAddToCartClick` to listen only on `ADD_TO_CART_BUTTON_CLICK` event!
@@ -258,6 +246,27 @@ render(
   document.getElementById('root')
 )
 ```
+
+## Use it as Redux middleware
+
+```js
+import { createStore, applyMiddleware } from 'redux';
+import { trackingMiddleware, Tracker } from 'react-tracker'
+
+const tracker = new Tracker();
+
+const store =  createStore(
+  reducers,
+  {}, // initialState
+  applyMiddleware(trackingMiddleware(tracker))
+);
+
+// Done :D
+
+tracker.trackEvent // will be called whenever a redux action dispatched and it will call the matched Action With Event (Action.type === Event.eventType)
+
+```
+
 
 ## Contribution
 
