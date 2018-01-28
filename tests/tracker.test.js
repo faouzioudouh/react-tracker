@@ -1,6 +1,6 @@
 /* global jest expect */
 
-import Tracker from '../Tracker';
+import { Tracker } from '../src';
 
 describe('Tracker', () => {
   describe('trackEvent()', () => {
