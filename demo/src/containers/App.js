@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import { TrackerProvider, Tracker, trackingMiddleware } from 'react-tracker'
 import Highlight from 'react-highlight';
+import { TrackerProvider, trackingMiddleware } from 'react-tracker'
 
 import FriendListApp from './FriendListApp';
 import storeProvider from '../hoc/storeProvider';
 import configureStore from '../store/configureStore';
 
-// tracking
-import trackingListeners from '../tracking/listeners';
-const tracker = new Tracker(trackingListeners);
+// get the tracker
+import configuredTracker from '../tracking/configureTracker';
 
-// Configure the store.
-const store = configureStore({}, trackingMiddleware(tracker));
+// Configure the store, with tracking middleware.
+const store = configureStore({}, trackingMiddleware(configuredTracker));
 
 const provideStore = storeProvider(store);
 const FriendListAppWithStore = provideStore(FriendListApp);
@@ -33,7 +32,7 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    tracker.on('*', (event, eventsHistory) => {
+    configuredTracker.on('*', (event, eventsHistory) => {
       this.setState({ eventsHistory });
     });
   }
@@ -42,7 +41,7 @@ export default class App extends Component {
     return (
       <div className="wrapper">
         <section>
-          <TrackerProvider tracker={tracker}>
+          <TrackerProvider tracker={configuredTracker}>
             <FriendListAppWithStore />
           </TrackerProvider>
         </section>

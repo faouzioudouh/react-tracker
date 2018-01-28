@@ -5,7 +5,7 @@
  * @param {Object} tracker 
  */
 const trackingMiddleware = tracker => () => next => action => {
-    tracker.track(action);
+    tracker.trackEvent(action);
     next(action);
 };
 

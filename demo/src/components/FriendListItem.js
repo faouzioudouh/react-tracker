@@ -44,7 +44,18 @@ const FriendListItem = ({
             })} />
           </button>
           <button className={`btn btn-default ${styles.btnAction}`}
-                  onClick={() => { deleteFriend(id); trackFriendDelete(id); } }>
+                  onClick={() => {
+                    // In additional to dispatch redux action to delete friend with given id
+                    // And since we configured our middleware will also
+                    // fire the event listener with eventType 'DELETE_FRIEND'
+                    // Redux action object will be passed to the event listener as first argument
+                    deleteFriend(id);
+
+                    // track friend delete
+                    trackFriendDelete(id);
+
+                    // So this event will be tracked twice !!
+                    } }>
             <i className="fa fa-trash" />
           </button>
         </div>
