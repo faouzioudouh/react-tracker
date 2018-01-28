@@ -51,7 +51,8 @@ const FriendListItem = ({
                     // Redux action object will be passed to the event listener as first argument
                     deleteFriend(id);
 
-                    // track friend delete
+                    // Imagine that deleteFriend is not a redux action
+                    // so you need to track this manually!
                     trackFriendDelete(id);
 
                     // So this event will be tracked twice !!
