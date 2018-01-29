@@ -46,7 +46,7 @@ export default class App extends Component {
           </TrackerProvider>
         </section>
         <section>
-          <h3>History of tracking :</h3>
+          <h3>DataLayer :</h3>
           <DisplayJson data={this.state.eventsHistory} />
         </section>
       </div>
