@@ -3,3 +3,15 @@ node_js:
   - "8"
 script:
   - npm run test
+notifications:
+  email: false
+after_success:
+  - npm run build
+deploy:
+  provider: pages
+  local-dir: demo/build
+  skip-cleanup: true
+  github-token: e06c87c0e7f0b1ad54cb7ee798eda20479f0b69e
+  keep-history: true
+  on:
+    branch: master
