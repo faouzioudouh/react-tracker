@@ -8,11 +8,11 @@
 - Easy to use (Redux-like)
 - Can be pluged with any Analytics platform agnostic lib (You can mainly do anything in the event listeners callback)
 
-## Why providing Redux Middleware?
+#### Why providing Redux Middleware?
 - Sometimes its better to track events based on the correspondent redux action!
 - [Demo](https://github.com/faouzioudouh/react-tracker/blob/master/demo/src/components/FriendListItem.js#L48)
 
-## Why not Middleware only?
+#### Why not Middleware only?
 - Not all the tracking events are necessarily redux actions!
 - [Demo](https://github.com/faouzioudouh/react-tracker/blob/master/demo/src/components/FriendListItem.js#L54)
 
@@ -23,88 +23,46 @@ $ npm install --save react-tracker
 ```
 This assumes you are using [npm](https://www.npmjs.com/) as your package manager.
 
-## Documentation
-
-* [Initialize the Tracker](#initialize-tracker)
-* [Create your first event listener](https://redux-actions.js.org/docs/api/index.html)
-* [Create your first event creator](https://redux-actions.js.org/docs/api/index.html)
-* [Middleware](https://redux-actions.js.org/docs/middleware/index.html)
-* [External Resources](https://redux-actions.js.org/docs/ExternalResources.html)
-* Usage in React
-  * [Contributors](https://redux-actions.js.org/docs/Contributors.html)
-  * [Contributors](https://redux-actions.js.org/docs/Contributors.html)
-  * [Contributors](https://redux-actions.js.org/docs/Contributors.html)
-
 ## Demo
 
 To see the react-tracker in action please visit the link below.
-
 [Link](https://faouzioudouh.github.io/react-tracker/)
 
-## [Event listener](#event-listener)
+## Documentation
 
-#### [Listen on one event](#listen-on-one-event)
-```js
-/**
- * This is an event listner, a pure function with (event, eventsHistory) => tracking goes here.
- * It describes what to do with the just-fired event.
- * Listener with eventType specified it will be called when the given eventType is fired/dispatched
- */
+* [Initialize the Tracker](#initialize-the-tracker)
+* [Create event listener](#create-event-istener)
+  * [Listen on one event](#listen-on-one-event)
+  * [Listen on all events](#listen-on-all-events)
+* [Create event creator](#create-event-creator)
+* [Track Events](#track-events)
+* [External Resources](https://redux-actions.js.org/docs/ExternalResources.html)
+* [Usage in React](#usage-with-react)
+  * [Provide Tracker to the root component](#provide-tracker-to-the-root-component)
+  * [Create Add to Cart Event Listener](#create-add-to-cart-event-listener)
+  * [Add to Cart Event creator](#add-to-cart-event-creator)
+  * [Create Product Component](#create-product-component)
+  * [Create Product List Component](#create-products-list-component)
+  * [Create mapTrackingToProps function and pass it to withTracking HOC](#create-mapTrackingToProps-function-and-pass-it-to-withTracking-hoc)
+* [Use it as Redux middleware](#use-it-as-redux-middleware)
 
-// Listener-per-event example
-function trackAddToCartClick(event = {}, eventsHistory) {
-    // Call DataLayer or you tracking provider (E.g. Pixel, GTM..)
-    dataLayer.push(...event.data);
-
-    // If you want save this event in the events history, just return it
-    // otherwise it will be ignored.
-    return event
-}
-
-// Allow `trackAddToCartClick` to listen only on `ADD_TO_CART_BUTTON_CLICK` event!
-trackAddToCartClick.eventType = 'ADD_TO_CART_BUTTON_CLICK';
-```
-
-#### Listen on all events
-```js
-/**
- * This is an event listner, a pure function with (event, eventsHistory) => tracking goes here.
- * It describes what to do with the just-fired event.
- * Listener with (*) eventType it will be called whenevent an event fired/dispatched
- * Think of it as `jQuery.on('*', callback)`
- * You can use `switch` statement to handle multiple events in one listener
- */
-
-// Listener-per-event example
-function trackCartEvents(event = {}, eventsHistory) {
-    switch(event.type) {
-      case 'ADD_TO_CART_BUTTON_CLICK':
-        // Call DataLayer or you tracking provider (E.g. Pixel, GTM..)
-        dataLayer.push(...event.data);
-        break;
-      
-      default:
-        // Silence
-    }
-}
-```
-
-## Initialize the Tracker!
+## Initialize the Tracker
 Create a Tracker holding the tracked events History of your app.
+
 Tracker API is `{ on, trackEvent, getHistory }`.
 
-- You can pass your event listeners to the constructor like so:
+- You can pass your already defined event listeners to the constructor like so:
 
 ```js
-let tracker = new Tracker([trackAddToCartClick, trackCartEvents])
+const tracker = new Tracker([trackAddToCart])
 ```
 
-- Or you can listen-on-the-go like using `on()`:
+- Or you can listen-on-the-go using `on()`:
 
 ```js
-let tracker = new Tracker();
+const tracker = new Tracker();
 
-// Listen on `PRODUCT_CLICK`events.
+// Listen on `PRODUCT_CLICK`event.
 tracker.on('PRODUCT_CLICK', (event, eventsHistory) =>
   console.log(event)
 );
@@ -115,26 +73,129 @@ tracker.on('*', (event, eventsHistory) =>
 );
 ```
 
-## Time to dispatch events!
+## Create Event listener
+Event listner is a pure function with (event, eventsHistory) => tracking goes here.
+It describes what to do with the just-fired event.
 
-You can dispatch/fire events using `trackEvent` function:
+Why providing the eventsHistory as second parameter ?
+=> because in some cases you'll need to apply some restrictions on some events E.g:
+ - Track product click only once!
+ - Track product click only if pageView is already tracked
 
-- Fire `ADD_TO_CART_EVENT`
+### Listen on one event
 ```js
-tracker.trackEvent({ type: 'ADD_TO_CART_EVENT' })
+/**
+ * Listener with eventType specified it will be called when the given eventType is dispatched
+ */
+function trackAddToCart(event, eventsHistory) {
+    // Call DataLayer or your tracking provider (E.g. Pixel, GTM..)
+    window.dataLayer.push(...event.data);
+
+    // If you want save this event in the events history, just return it
+    // otherwise it will be ignored.
+    return event
+}
+
+// Allow `trackAddToCart` to listen only on `ADD_TO_CART` event
+trackAddToCart.eventType = 'ADD_TO_CART';
 ```
 
-- Fire `ADD_TO_CART_EVENT`
+### Listen on all events
 ```js
-tracker.trackEvent({ type: 'ADD_TO_CART_EVENT' })
+/**
+ * Since no eventType was specified it will be called whenever an event dispatched
+ * You can use `switch` statement to handle multiple events in one listener
+ */
+function trackCartEvents(event, eventsHistory) {
+    switch(event.type) {
+      case 'ADD_TO_CART':
+        // Call DataLayer or your tracking provider (E.g. Pixel, GTM..)
+        window.dataLayer.push(...event);
+        break;
+
+      default:
+        // Silence
+    }
+}
 ```
 
-- Fire `PRODUCT_CLICK`
+## Track Events
+`trackEvent` is a function that accept an object describes the event as argument.
+
+- Track event `ADD_TO_CART_EVENT` with data.
+```js
+tracker.trackEvent({
+  type: 'ADD_TO_CART_EVENT',
+  data: {
+    productId: '12345',
+    quantity: 5
+  }
+})
+```
+
+- Track event `PRODUCT_CLICK` with no associated data.
 ```js
 tracker.trackEvent({ type: 'PRODUCT_CLICK' })
 ```
 
 ## Usage with React
+### Provide tracker to the root component
+
+All container components need access to the tracker so they can track events.
+
+We will use the `<TrackerProvider>` to [magically](https://facebook.github.io/react/docs/context.html) make the tracker available to all container components in the application without passing it explicitly.
+You only need to use it once when you render the root component:
+
+#### `index.js`
+
+```js
+import React from 'react'
+import { render } from 'react-dom'
+import { TrackerProvider, Tracker } from 'react-tracker'
+import { trackProductClick } from './tracking/listeners/cart'
+import ProductsList from './components/ProductsList'
+
+const tracker = new Tracker([trackProductClick])
+
+render(
+  <TrackerProvider tracker={tracker}>
+    <ProductsList products={someProducts} />
+  </TrackerProvider>,
+  document.getElementById('root')
+)
+```
+
+### Create Add to Cart Event Listener `.../tracking/listeners/cart.js`
+
+```js
+function trackAddToCart(event, eventsHistory) {
+    window.dataLayer.push(...event);
+    return event
+}
+
+// Allow `trackAddToCart` to listen only on `ADD_TO_CART` event
+trackAddToCart.eventType = 'ADD_TO_CART';
+
+export default trackAddToCart;
+```
+
+### Add To Cart Event creator `.../tracking/events/cart.js`
+Event creator should return an object that describe the event (Type and data).
+
+- type: string (Required)
+- data: Any (Optional)
+
+```js
+function getAddToCartEvent(id, price) {
+  return {
+      type: 'ADD_TO_CART',
+      data: {
+          id: id,
+          price: price
+      }
+  }
+};
+```
 
 ### Create Product Component `components/Product.js`
 
@@ -153,109 +214,54 @@ const Product = ({ onClick, title, price, currency }) => (
 export default Product
 ```
 
-### Create Product List Component `components/ProductList.js`
+### Create Products List Component `components/ProductList.js`
 
 ```js
 import Product from './Product'
 
-const ProductList = ({ products, trackProductClick }) => (
+const ProductList = ({ products, trackAddToCart }) => (
   <ul>
     {products.map(product => (
-      <Product key={product.id} {...product} onClick={() => trackProductClick(product.id, product.price)} />
+      <Product key={product.id} {...product} onClick={() => trackAddToCart(product.id, product.price)} />
     ))}
   </ul>
 )
 
 ProductList.propTypes = {
   // ...
-  trackProductClick: PropTypes.func
+  trackAddToCart: PropTypes.func
 }
 
 export default ProductList
 ```
 
-### Create Event Listener `.../tracking/listeners/cart.js`
+### Create mapTrackingToProps function and pass it to withTracking HOC `.../compoenets/ProductListContainer.js`
 
-```js
-function trackProductClick(event = {}, eventsHistory) {
-    dataLayer.push(...event);
-    return event
-}
-
-// scope `trackProductClick` to listen only on `PRODUCT_CLICK` event!
-trackProductClick.eventType = 'PRODUCT_CLICK';
-```
-
-### Event creator `.../tracking/events/cart.js`
-Event creator (Something like Redux action) should return an object that describ the event (Type and data)!
-
-```js
-function getProductClickEvent(id, price) {
-  return {
-      type: 'PRODUCT_CLICK',
-      data: {
-          id: id,
-          price: price
-      }
-  }
-};
-```
-
-### Create mapTrackingToProps
 `mapTrackingToProps` should return an object which will be merged with the component Props.
 
 ```js
+import React from 'react';
+import { withTracking } from 'react-tracker';
+import { getAddToCartEvent } from '.../tracking/events/cart';
+import ProductsList from './ProductsList';
+
 const mapTrackingToProps = trackEvent => {
   return {
-    trackProductClick: (id, price) => {
-      trackEvent(getProductClickEvent(id, price))
+    trackAddToCart: (id, price) => {
+      trackEvent(getAddToCartEvent(id, price))
     }
   }
 }
-```
 
-### Pass mapTrackingToProps to `withTracking` HOC
-`withTracking` accepet the `mapTrackingToProps` and then return a function that accept a component
-and return the Enhanced component!
-
-Finally, we create the `ProductsList` by calling `withTracking()` and passing our `mapTrackingToProps`
-
-```js
-import { withTracking } from 'react-tracker'
-
+// Finally, we create the `ProductsList` by calling `withTracking()` and passing our `mapTrackingToProps`
 const ProductsListWithTracking = withTracking(mapTrackingToProps)(ProductsList)
 
 export default ProductsListWithTracking
 ```
 
-
-### Let React meet our Tracker
-
-All container components need access to the tracker so they can fire events.
-
-We will use the `<TrackerProvider>` to [magically](https://facebook.github.io/react/docs/context.html) make the tracker available to all container components in the application without passing it explicitly.
-You only need to use it once when you render the root component:
-
-#### `index.js`
-
-```js
-import React from 'react'
-import { render } from 'react-dom'
-import { TrackerProvider, Tracker } from 'react-tracker'
-import { trackProductClick } from './tracking/listeners/cart'
-import ProductsList from './components/ProductsList'
-
-let tracker = new Tracker([trackProductClick /*, other event listeners goes here*/])
-
-render(
-  <TrackerProvider tracker={tracker}>
-    <ProductsList products={someProducts} />
-  </TrackerProvider>,
-  document.getElementById('root')
-)
-```
-
 ## Use it as Redux middleware
+
+The function trackEvent from the Tracker will be called whenever a redux action dispatched and it will call the matched Event listener With the dispathced action (Action.type === Listener.eventType)
 
 ```js
 import { createStore, applyMiddleware } from 'redux';
@@ -270,10 +276,7 @@ const store =  createStore(
 );
 
 // That's All ;)
-
-// The function [trackEvent] will be called whenever a redux action dispatched and it will call the matched Action With Event (Action.type === Event.eventType)
 ```
-
 
 ## Contribution
 
