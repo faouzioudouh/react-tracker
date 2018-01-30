@@ -12,7 +12,7 @@ import {
 export const onFriendDelete = (event = {}, eventsHistory) => {
     // For example let's push the recieved event to our Datalyer!
     window.dataLayer.push({
-        ...event.data
+        ...event
     })
 
     // In order to save this event ins the histry (so we can log it) we should return it!
@@ -29,7 +29,7 @@ onFriendDelete.eventType = DELETE_FRIEND;
 export const onAddFriend = (event = {}, eventsHistory) => {
     // For example let's push the recieved event to our Datalyer!
     window.dataLayer.push({
-        ...event.data
+        ...event
     })
     
     // In order to save this event ins the histry (so we can log it) we should return it!
