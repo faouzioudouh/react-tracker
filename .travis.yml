@@ -1,17 +1,20 @@
 language: node_js
 node_js:
-  - "8"
+- '8'
 script:
-  - npm run test
+- npm run test
 notifications:
   email: false
 after_success:
-  - npm run build
+- npm run build
 deploy:
   provider: pages
   local-dir: demo/build
   skip-cleanup: true
-  github-token: e06c87c0e7f0b1ad54cb7ee798eda20479f0b69e
+  github-token: $GITHUB_TOKEN
   keep-history: true
   on:
     branch: master
+env:
+  global:
+    secure: Lwoc3DSsUJmXOj79LdH+dZ/LRPcIaano9qQCkaTcFiEcgUI5N5kBlROsA9ZWK4S5TMSOm4Tu/wy7QhJttSc9+g5baXjQela5q2IhVbLYX/ACxCy3DPAn8zW9qb4hw7dnwfCk3hJP8X3IRr1oGOJvE8808EKVOMby45E4sh1defcKGRVc71K1huI7w9II2tqKu08MWmxNJ8mkOJZMrGqSwmp+8/gai+uI4UgF9qSKPVuiZRS4FwNbebEHBRcABgue7kSKEe2V7rd1VA3hKy3k+oK0gEgLgRtfWQTvQvG8RObix/FZP2Ki9xuAsjz3v6nIcJPUopK4ysqB+hjhNrcsbfPLRv6Amnjs6B9GTZuxQ2gkfTCfkdQfTkGTbBM9E+C4TPVWg+xtzcoPNoCxNlHDySgT2lco9LnZE5dn5ofK69KYwBgtAS2iQfwUgEwY1XsN7luAZvOQ4ThZLqEWGFw4ipt9kOaB4g3NUeBT18XBXiTzmGOCmMlVQtB1U4ZGsz9OR9x2GtSykj8CiTSeZRNZlNLN05SJRmTrC+nmWVF1nYSqGID4sZKzony2kEM+dwvpHTetj9hYPVMklwzzG4ufON//Ogkrpsz0hfSIieuJZXlu07lmTF587iyAGAV5KulunpTZ5lC55rs+fzfQ7dP+4MOmWqmP1IZa/LfCmgMeFTo=
