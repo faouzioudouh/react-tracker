@@ -74,7 +74,7 @@ describe('Tracker', () => {
       expect(newTracker.getHistory()).toEqual([]);
     });
 
-    it('should subscribe add the given callback to the subscribers queue', () => {
+    it('should add the given callback to the subscribers queue', () => {
       const subscribeToAdd = jest.fn(() => null);
 
       const newTracker = new Tracker([]);
@@ -86,6 +86,14 @@ describe('Tracker', () => {
       });
 
       expect(subscribeToAdd).toHaveBeenCalled();
+    });
+
+    it('should not add the given callback to the subscribers queue', () => {
+      const subscribeToAdd = 'not a function';
+      const newTracker = new Tracker([]);
+
+      newTracker.on('EVENT_TEST', subscribeToAdd);
+      expect(newTracker.listeners).toEqual([]);
     });
 
     it('should getHistory return the current history of tracked events', () => {
@@ -102,6 +110,17 @@ describe('Tracker', () => {
       });
 
       expect(subscriberWithNoEvent).toHaveBeenCalled();
+    });
+
+    it('should not call listeners if event dispatched have no type', () => {
+      const subscriberWithNoEvent = jest.fn();
+
+      const newTracker = new Tracker([subscriberWithNoEvent]);
+      newTracker.trackEvent({
+        NoType: 'EVENT_TEST'
+      });
+
+      expect(subscriberWithNoEvent).not.toHaveBeenCalled();
     });
   });
 });
