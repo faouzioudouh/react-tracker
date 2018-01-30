@@ -10,11 +10,11 @@
 
 #### Why providing Redux Middleware?
 - Sometimes its better to track events based on the correspondent redux action!
-- [Demo](https://github.com/faouzioudouh/react-tracker/blob/master/demo/src/components/FriendListItem.js#L48)
+- [Example](https://github.com/faouzioudouh/react-tracker/blob/master/demo/src/components/FriendListItem.js#L48)
 
 #### Why not Middleware only?
 - Not all the tracking events are necessarily redux actions!
-- [Demo](https://github.com/faouzioudouh/react-tracker/blob/master/demo/src/components/FriendListItem.js#L54)
+- [Example](https://github.com/faouzioudouh/react-tracker/blob/master/demo/src/components/FriendListItem.js#L54)
 
 ## Installation
 
