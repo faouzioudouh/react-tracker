@@ -28,7 +28,11 @@ export default class Tracker {
 
             if (
                 typeof listener === 'function' &&
-                (listener.eventType === type || listener.eventType === '*')
+                (
+                    listener.eventType === type
+                    || listener.eventType === '*'
+                    || typeof listener.eventType === 'undefined'
+                )
             ) {
                 const save = listener.call(null, event, this.trackingHistory);
 

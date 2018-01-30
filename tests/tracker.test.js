@@ -92,5 +92,16 @@ describe('Tracker', () => {
       const newTracker = new Tracker([]);
       expect(newTracker.getHistory()).toEqual([]);
     });
+
+    it('should call listeners with no eventType specified', () => {
+      const subscriberWithNoEvent = jest.fn();
+
+      const newTracker = new Tracker([subscriberWithNoEvent]);
+      newTracker.trackEvent({
+        type: 'EVENT_TEST'
+      });
+
+      expect(subscriberWithNoEvent).toHaveBeenCalled();
+    });
   });
 });
