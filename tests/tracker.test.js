@@ -88,12 +88,20 @@ describe('Tracker', () => {
       expect(subscribeToAdd).toHaveBeenCalled();
     });
 
-    it('should not add the given callback to the subscribers queue', () => {
+    it('should throw if the given callback is not a function', () => {
       const subscribeToAdd = 'not a function';
       const newTracker = new Tracker([]);
 
-      newTracker.on('EVENT_TEST', subscribeToAdd);
-      expect(newTracker.listeners).toEqual([]);
+      expect(() => {newTracker.on('EVENT_TEST', subscribeToAdd)})
+        .toThrow('Expected onClick listener to be a function, instead got type string');
+    });
+
+    it('should throw if the given event type is not valid', () => {
+      const subscribeToAdd = jest.fn();
+      const newTracker = new Tracker([]);
+
+      expect(() => {newTracker.on(undefined, subscribeToAdd)})
+        .toThrow('No event type is specified. (*) to listen on all events');
     });
 
     it('should getHistory return the current history of tracked events', () => {

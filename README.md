@@ -5,27 +5,18 @@
 ## What?
 - React specific tracking library, usable as a higher-order component
 - Flexible-scalable solution for tracking
-- Easy to use (Redux-like)
 - Can be pluged with any Analytics platform agnostic lib (You can mainly do anything in the event listeners callback)
-
-#### Why providing Redux Middleware?
-- Sometimes its better to track events based on the correspondent redux action!
-- [Example](https://github.com/faouzioudouh/react-tracker/blob/master/demo/src/components/FriendListItem.js#L48)
-
-#### Why not Middleware only?
-- Not all the tracking events are necessarily redux actions!
-- [Example](https://github.com/faouzioudouh/react-tracker/blob/master/demo/src/components/FriendListItem.js#L54)
+- Easy to use (Redux-like)
 
 ## Installation
-
 ```
 $ npm install --save react-tracker
 ```
 This assumes you are using [npm](https://www.npmjs.com/) as your package manager.
 
 ## Demo
-
 To see the react-tracker in action please visit the link below.
+
 [Link](https://faouzioudouh.github.io/react-tracker/)
 
 ## Documentation
@@ -36,7 +27,6 @@ To see the react-tracker in action please visit the link below.
   * [Listen on all events](#listen-on-all-events)
 * [Create event creator](#create-event-creator)
 * [Track Events](#track-events)
-* [External Resources](https://redux-actions.js.org/docs/ExternalResources.html)
 * [Usage in React](#usage-with-react)
   * [Provide Tracker to the root component](#provide-tracker-to-the-root-component)
   * [Create Add to Cart Event Listener](#create-add-to-cart-event-listener)
@@ -44,7 +34,7 @@ To see the react-tracker in action please visit the link below.
   * [Create Product Component](#create-product-component)
   * [Create Product List Component](#create-products-list-component)
   * [Create mapTrackingToProps function and pass it to withTracking HOC](#create-mapTrackingToProps-function-and-pass-it-to-withTracking-hoc)
-* [Use it as Redux middleware](#use-it-as-redux-middleware)
+* [Create Redux middleware to track redux actions](#create-redux-middleware-for-redux-based-apps)
 
 ## Initialize the Tracker
 Create a Tracker holding the tracked events History of your app.
@@ -259,13 +249,28 @@ const ProductsListWithTracking = withTracking(mapTrackingToProps)(ProductsList)
 export default ProductsListWithTracking
 ```
 
-## Use it as Redux middleware
+## Create redux middleware for redux-based apps
+If your app is using redux for state managment, you might want to track redux actions directly.
+Let's create our [Redux middleware](https://redux.js.org/docs/advanced/Middleware.html) to take the tracker as argument and call trackEvent on every redux action dispatched.
 
-The function trackEvent from the Tracker will be called whenever a redux action dispatched and it will call the matched Event listener With the dispathced action (Action.type === Listener.eventType)
+```js
+/**
+ * Simple redux middleware to use redux actions as input of tracking!
+ * this will call the track function from the provided instance of tracker on every action
+ * and use the action type as the event type and the action payload as the event data
+ * @param {Object} tracker 
+ */
+const trackingMiddleware = tracker => () => next => action => {
+    tracker.trackEvent(action);
+    next(action);
+};
+
+export default trackingMiddleware;
+```
 
 ```js
 import { createStore, applyMiddleware } from 'redux';
-import { trackingMiddleware, Tracker } from 'react-tracker'
+import { trackingMiddleware, Tracker } from '../trackingMiddleware'
 
 const tracker = new Tracker();
 

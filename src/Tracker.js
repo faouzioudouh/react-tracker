@@ -9,11 +9,16 @@ export default class Tracker {
     }
 
     on(eventType, callback) {
-        if (typeof callback === 'function' && eventType && typeof eventType === 'string') {
-            callback.eventType = eventType;
-
-            this.listeners = [...this.listeners, callback];
+        if (typeof callback !== 'function') {
+            throw new Error(`Expected onClick listener to be a function, instead got type ${typeof callback}`);            
         }
+
+        if (typeof eventType !== 'string' || eventType.length < 1) {
+            throw new Error(`No event type is specified. (*) to listen on all events`);            
+        }
+
+        callback.eventType = eventType;
+        this.listeners = [...this.listeners, callback];
     }
 
     trackEvent(event) {
