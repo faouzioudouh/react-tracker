@@ -1,6 +1,7 @@
 # ![React tracker Logo](http://pichoster.net/images/2018/01/07/32e65824cf5bdee238722112b9e95a10.png)
 
-# react-tracker [![build status](https://img.shields.io/travis/reactjs/react-redux/master.svg?style=flat-square)](https://travis-ci.org/faouzioudouh/react-tracker) [![npm version](https://badge.fury.io/js/react-tracker.svg)](https://badge.fury.io/js/react-tracker)
+# react-tracker [![build status](https://img.shields.io/travis/reactjs/react-redux/master.svg?style=flat-square)](https://travis-ci.org/faouzioudouh/react-tracker) [![npm version](https://badge.fury.io/js/react-tracker.svg)](https://badge.fury.io/js/react-tracker) [![codecov](https://codecov.io/gh/faouzioudouh/react-tracker/branch/master/graph/badge.svg)](https://codecov.io/gh/faouzioudouh/react-tracker)
+
 
 ## What?
 - React specific tracking library, usable as a higher-order component

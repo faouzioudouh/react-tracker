@@ -5,7 +5,9 @@
   "main": "build/index.js",
   "scripts": {
     "build": "webpack",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:cov": "nyc npm test",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov --token=44187b3f-41f9-49ff-bc36-0d10a9e5be65"    
   },
   "repository": {
     "type": "git",
@@ -35,7 +37,9 @@
     "jest": "^22.1.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "webpack": "^3.6.0"
+    "webpack": "^3.6.0",
+    "nyc": "^11.4.1",
+    "codecov": "^3.0.0"
   },
   "dependencies": {
     "prop-types": "^15.5.10"

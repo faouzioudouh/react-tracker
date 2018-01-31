@@ -2,11 +2,12 @@ language: node_js
 node_js:
 - '8'
 script:
-- npm run test
+- npm run test:cov
 notifications:
   email: false
 after_success:
 - npm run build
+- npm run coverage
 deploy:
   provider: pages
   local-dir: demo/build
