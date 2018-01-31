@@ -1,6 +1,6 @@
 {
   "name": "react-tracker",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Track actions within your React app with a tracker redux-like!",
   "main": "build/index.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "React",
     "tracking",
     "track",
-    "analytic"
+    "analytics"
   ],
   "author": "Faouzi Oudouh",
   "license": "ISC",
