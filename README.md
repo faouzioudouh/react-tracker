@@ -65,13 +65,16 @@ tracker.on('*', (event, eventsHistory) =>
 ```
 
 ## Create Event listener
-Event listner is a pure function with (event, eventsHistory) => tracking goes here.
+Event listner is a pure function with `(event, eventsHistory) => tracking goes here`.
+
 It describes what to do with the just-fired event.
 
 Why providing the eventsHistory as second parameter ?
+
 => because in some cases you'll need to apply some restrictions on some events E.g:
  - Track product click only once!
  - Track product click only if pageView is already tracked
+ - etc
 
 ### Listen on one event
 ```js
@@ -135,6 +138,7 @@ tracker.trackEvent({ type: 'PRODUCT_CLICK' })
 All container components need access to the tracker so they can track events.
 
 We will use the `<TrackerProvider>` to [magically](https://facebook.github.io/react/docs/context.html) make the tracker available to all container components in the application without passing it explicitly.
+
 You only need to use it once when you render the root component:
 
 #### `index.js`
