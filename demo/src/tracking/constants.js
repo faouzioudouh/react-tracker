@@ -1,3 +1,3 @@
-export const DELETE_FRIEND = 'DELETE_FRIEND';
-export const ADD_FRIEND = 'ADD_FRIEND';
-export const FRIENDS_PAGE_VIEW = 'FRIENDS_PAGE_VIEW';
+export const PURCHASE_PRODUCT = 'PURCHASE_PRODUCT';
+export const STAR_PRODUCT = 'STAR_PRODUCT';
+export const PAGE_VIEW = 'PAGE_VIEW';

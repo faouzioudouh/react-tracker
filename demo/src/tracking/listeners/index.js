@@ -1,7 +1,7 @@
 import values from 'lodash/values';
 
-import * as friendEvents from './friendEventsListener';
+import * as productEventsListener from './productEventsListener';
 
 export default [
-    ...values(friendEvents)
+    ...values(productEventsListener)
 ];

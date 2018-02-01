@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import Highlight from 'react-highlight';
-import { TrackerProvider, trackingMiddleware } from 'react-tracker'
+import { TrackerProvider } from 'react-tracker'
 import { ToastContainer, toast } from 'react-toastify';
 
-import FriendListApp from './FriendListApp';
+import GroceryStoreApp from './GroceryStoreApp';
 import storeProvider from '../hoc/storeProvider';
 import configureStore from '../store/configureStore';
 
 // get the tracker
+import trackingMiddleware from '../tracking/trackingMiddleware';
 import configuredTracker from '../tracking/configureTracker';
 
 // Configure the store, with tracking middleware.
 const store = configureStore({}, trackingMiddleware(configuredTracker));
 
 const provideStore = storeProvider(store);
-const FriendListAppWithStore = provideStore(FriendListApp);
+const GroceryStoreAppWithStore = provideStore(GroceryStoreApp);
 
 // Component to format JSON and display it!
 const DisplayJson = dataLayer => (
@@ -47,7 +48,7 @@ export default class App extends Component {
         <ToastContainer />
         <section>
           <TrackerProvider tracker={configuredTracker}>
-            <FriendListAppWithStore />
+            <GroceryStoreAppWithStore />
           </TrackerProvider>
         </section>
         <section>

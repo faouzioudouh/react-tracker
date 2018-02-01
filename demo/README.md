@@ -18,7 +18,7 @@ $ npm run start
 
 ## How to use
 
-- Try to add a friend
-- try to delete a frined
+- Try to add a product
+- try to star a product
 - Page view should be fired on load!
 - check the global variable ``` dataLayer ```

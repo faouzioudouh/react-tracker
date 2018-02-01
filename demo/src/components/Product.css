@@ -1,4 +1,4 @@
-:local(.friendListItem) {
+:local(.Product) {
   list-style: none;
   padding: 20px 10px 20px 20px;
   background-color: white;
@@ -6,15 +6,15 @@
   display: flex;
 }
 
-:local(.friendInfos) {
+:local(.productInfos) {
   flex: 1 0 auto;
 }
 
-:local(.friendInfos span) {
+:local(.Product span) {
   font-weight: bold;
 }
 
-:local(.friendActions) {
+:local(.productActions) {
   flex: 0 0 90px;
 }
 
