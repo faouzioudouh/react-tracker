@@ -6,7 +6,10 @@
 ## What?
 - React specific tracking library, usable as a higher-order component
 - Flexible-scalable solution for tracking
-- Can be pluged with any Analytics platform agnostic lib (You can mainly do anything in the event listeners callback)
+- Can be pluged with any Analytics platform :
+  - Google Tag Manager
+  - Facebook Pixel
+  - You can mainly do anything in the event listeners callback..
 - Easy to use (Redux-like)
 
 ## Installation
@@ -256,6 +259,7 @@ export default ProductsListWithTracking
 
 ## Create redux middleware for redux-based apps
 If your app is using redux for state managment, you might want to track redux actions directly.
+
 Let's create our [Redux middleware](https://redux.js.org/docs/advanced/Middleware.html) to take the tracker as argument and call trackEvent on every redux action dispatched.
 
 ```js
@@ -275,6 +279,7 @@ export default trackingMiddleware;
 
 ```js
 import { createStore, applyMiddleware } from 'redux';
+import { Tracker } from 'react-redux';
 import { trackingMiddleware, Tracker } from '../trackingMiddleware'
 
 const tracker = new Tracker();
