@@ -35,7 +35,7 @@ export default class App extends Component {
 
   componentWillMount() {
     configuredTracker.on('*', event => {
-      toast(`Event Tracked: ${event.type}`);
+      toast(`Event Tracked: ${event.type} ${event.from ? `from ${event.from}` : ''}`);
       this.setState({
         dataLayer: window.dataLayer,
       });

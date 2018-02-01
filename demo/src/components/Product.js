@@ -45,11 +45,11 @@ const Product = ({
                   onClick={() => {
                     // In additional to dispatch redux action to add product to cart with given id
                     // And since we configured our middleware will also
-                    // fire the event listener with eventType 'ADD_PRODUCT_TO_CART'
+                    // fire the event listener with eventType 'PURCHASE_PRODUCT'
                     // Redux action object will be passed to the event listener as first argument
                     purchaseProduct(id);
 
-                    // Imagine that deleteFriend is not a redux action
+                    // Imagine that purchase product is not a redux action
                     // so you need to track this manually!
                     trackPurchaseProduct(id);
 

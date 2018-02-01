@@ -4,7 +4,6 @@ const trackingMiddleware = tracker => () => next => action => {
         from: 'REDUX'
     });
 
-    console.log(actionWithOrigin)
     tracker.trackEvent(actionWithOrigin);
 
     next(action);

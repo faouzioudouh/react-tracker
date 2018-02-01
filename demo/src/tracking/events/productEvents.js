@@ -1,5 +1,5 @@
 import {
-    PURCHASE,
+    PURCHASE_PRODUCT,
     STAR_PRODUCT,
     PAGE_VIEW,
 } from '../constants'
@@ -9,7 +9,7 @@ import {
  * @param {Number} friendId 
  */
 export const purchaseEvent = productId => ({
-    type: PURCHASE,
+    type: PURCHASE_PRODUCT,
     data: {
         productId  
     }
