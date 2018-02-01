@@ -7,6 +7,7 @@ notifications:
   email: false
 after_success:
 - npm run build
+- cd demo && npm i && npm build
 - npm run coverage
 deploy:
   provider: pages
