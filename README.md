@@ -2,7 +2,7 @@
 
 # react-tracker [![build status](https://img.shields.io/travis/reactjs/react-redux/master.svg?style=flat-square)](https://travis-ci.org/faouzioudouh/react-tracker) [![npm version](https://badge.fury.io/js/react-tracker.svg)](https://badge.fury.io/js/react-tracker) [![codecov](https://codecov.io/gh/faouzioudouh/react-tracker/branch/master/graph/badge.svg)](https://codecov.io/gh/faouzioudouh/react-tracker)
 
-_Track user interaction with React based apps_
+_Track user interaction with minimal API_
 
 ## What?
 - React specific tracking library, usable as a higher-order component
